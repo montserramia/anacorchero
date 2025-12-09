@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - search
+  theme:
+    - ana_corchero_xara
+id: ana_corchero_xara_search
+theme: ana_corchero_xara
+region: search_box
+weight: -6
+provider: null
+plugin: search_form_block
+settings:
+  id: search_form_block
+  label: Search
+  label_display: visible
+  provider: search
+  page_id: node_search
+visibility: {  }

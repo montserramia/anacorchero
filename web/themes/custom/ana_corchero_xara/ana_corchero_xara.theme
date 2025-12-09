@@ -1,0 +1,130 @@
+<?php
+/**
+ * @file
+ * Extra Functions for XARA theme.
+ */
+use Drupal\file\Entity\File;
+/**
+ * Sanitise input urls.
+ */
+function santise_val_url($url) {
+	if ($url != '') {
+
+		// Sanitise (remove all illegal characters) from url.
+		$url = filter_var($url, FILTER_SANITIZE_URL);
+
+		// Validate url.
+		if (filter_var($url, FILTER_VALIDATE_URL) == TRUE) {
+			$url = $url;
+		} else {
+			$url = '#';
+		}
+		return $url;
+	}
+}
+function ana_corchero_xara_preprocess_html(&$variables) {
+	$variables['base_path'] = base_path();
+	$variables['xara_path'] = \Drupal::service('extension.list.theme')->getPath('ana_corchero_xara');
+	$variables['font_src'] = theme_get_setting('font_src', 'ana_corchero_xara');
+	$variables['styling'] = theme_get_setting('styling', 'ana_corchero_xara');
+	$variables['styling_code'] = theme_get_setting('styling_code', 'ana_corchero_xara');
+	$variables['slider_show'] = theme_get_setting('slider_show', 'ana_corchero_xara');
+	$variables['slider_speed'] = theme_get_setting('slider_speed', 'ana_corchero_xara');
+}
+function ana_corchero_xara_preprocess_page(array &$variables) {
+	// theme path
+	$variables['page_xara_path'] = \Drupal::service('extension.list.theme')->getPath('ana_corchero_xara');
+	
+	// Layout
+	$variables['container_width'] = theme_get_setting('container_width', 'ana_corchero_xara');
+	$variables['header_width'] = theme_get_setting('header_width', 'ana_corchero_xara');
+	$variables['main_width'] = theme_get_setting('main_width', 'ana_corchero_xara');
+	$variables['footer_width'] = theme_get_setting('footer_width', 'ana_corchero_xara');
+
+	// homepage slider
+	$variables['slider_show'] = theme_get_setting('slider_show', 'ana_corchero_xara');
+	$variables['slider_code'] = theme_get_setting('slider_code', 'ana_corchero_xara');
+	$variables['slider_image'] = theme_get_setting('slider_image', 'ana_corchero_xara');
+	$slider_image_id = theme_get_setting('slider_image', 'ana_corchero_xara');
+	if(!empty($slider_image_id)) {
+		$slider_image_file = File::load($slider_image_id[0]);
+		$slider_image_file->setPermanent();
+		$slider_image_file->save();
+		$slider_image_file_usage = \Drupal::service('file.usage');
+		$slider_image_file_usage->add($slider_image_file, 'ana_corchero_xara', 'theme', $slider_image_id[0]);
+	};
+	if(!empty($slider_image_file)) {
+    $imageuri = $slider_image_file->getFileUri();
+    $variables['slider_image_path'] = \Drupal::service('file_url_generator')->generateAbsoluteString($imageuri);
+	};
+
+	// Header
+	$variables['header_page_content_position'] = theme_get_setting('header_page_content_position', 'ana_corchero_xara');
+
+	// Sidebar
+	$variables['front_sidebar'] = theme_get_setting('front_sidebar', 'ana_corchero_xara');
+	$variables['sidebar_width_default'] = theme_get_setting('sidebar_width_default', 'ana_corchero_xara');
+	$variables['sidebar_width_left'] = theme_get_setting('sidebar_width_left', 'ana_corchero_xara');
+	$variables['sidebar_width_right'] = theme_get_setting('sidebar_width_right', 'ana_corchero_xara');
+
+	// Footer
+	$variables['copyright_text'] = theme_get_setting('copyright_text', 'ana_corchero_xara');
+
+	// content
+	$variables['rtl'] = theme_get_setting('rtl', 'ana_corchero_xara');
+
+	// Social
+	$variables['social_icons_show'] = theme_get_setting('social_icons_show', 'ana_corchero_xara');
+	$variables['facebook_url'] = santise_val_url(theme_get_setting('facebook_url', 'ana_corchero_xara'));
+	$variables['twitter_url'] = santise_val_url(theme_get_setting('twitter_url', 'ana_corchero_xara'));
+	$variables['instagram_url'] = santise_val_url(theme_get_setting('instagram_url', 'ana_corchero_xara'));
+	$variables['linkedin_url'] = santise_val_url(theme_get_setting('linkedin_url', 'ana_corchero_xara'));
+	$variables['youtube_url'] = santise_val_url(theme_get_setting('youtube_url', 'ana_corchero_xara'));
+	$variables['vimeo_url'] = santise_val_url(theme_get_setting('vimeo_url', 'ana_corchero_xara'));
+  	$variables['telegram_url'] = santise_val_url(theme_get_setting('telegram_url', 'ana_corchero_xara'));
+  	$variables['whatsapp_url'] = santise_val_url(theme_get_setting('whatsapp_url', 'ana_corchero_xara'));
+  	$variables['github_url'] = santise_val_url(theme_get_setting('github_url', 'ana_corchero_xara'));
+	$variables['vk_url'] = santise_val_url(theme_get_setting('vk_url', 'ana_corchero_xara'));
+
+	// Typography
+	$variables['body_font_size'] = theme_get_setting('body_font_size', 'ana_corchero_xara');
+
+	// Element -> Header menu
+	$variables['main_menu_default'] = theme_get_setting('main_menu_default', 'ana_corchero_xara');
+	$variables['main_menu_top_size'] = theme_get_setting('main_menu_top_size', 'ana_corchero_xara');
+	$variables['main_menu_top_weight'] = theme_get_setting('main_menu_top_weight', 'ana_corchero_xara');
+	$variables['main_menu_top_transform'] = theme_get_setting('main_menu_top_transform', 'ana_corchero_xara');
+	$variables['main_menu_sub_size'] = theme_get_setting('main_menu_sub_size', 'ana_corchero_xara');
+	$variables['main_menu_sub_weight'] = theme_get_setting('main_menu_sub_weight', 'ana_corchero_xara');
+	$variables['main_menu_sub_transform'] = theme_get_setting('main_menu_sub_transform', 'ana_corchero_xara');
+	
+	// Element -> Page title
+	$variables['page_title_default'] = theme_get_setting('page_title_default', 'ana_corchero_xara');
+	$variables['page_title_size'] = theme_get_setting('page_title_size', 'ana_corchero_xara');
+	$variables['page_title_transform'] = theme_get_setting('page_title_transform', 'ana_corchero_xara');
+
+	// Components -> Font icons
+	$variables['fontawesome_four'] = theme_get_setting('fontawesome_four', 'ana_corchero_xara');
+	$variables['fontawesome_five'] = theme_get_setting('fontawesome_five', 'ana_corchero_xara');
+	$variables['bootstrapicons'] = theme_get_setting('bootstrapicons', 'ana_corchero_xara');
+	
+	// Components -> scroll to top
+	$variables['scrolltotop_on'] = theme_get_setting('scrolltotop_on', 'ana_corchero_xara');
+	
+	// Comment
+	$variables['highlight_author_comment'] = theme_get_setting('highlight_author_comment', 'ana_corchero_xara');
+}
+/**
+ * Node preprocess.
+ */
+function ana_corchero_xara_preprocess_node(array &$variables) {
+	$variables['node_author_pic'] = theme_get_setting('node_author_pic', 'ana_corchero_xara');
+	$variables['node_tags'] = theme_get_setting('node_tags', 'ana_corchero_xara');
+}
+
+/**
+ * Comment preprocess.
+ */
+function ana_corchero_xara_preprocess_comment(array &$variables) {
+	$variables['comment_user_pic'] = theme_get_setting('comment_user_pic', 'ana_corchero_xara');
+}

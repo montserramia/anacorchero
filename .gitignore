@@ -53,6 +53,7 @@ tmp/
 temp/
 
 # Ignore backup files
+*.tar.gz
 *.bak
 *.backup
 *~
